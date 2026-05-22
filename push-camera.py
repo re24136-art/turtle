@@ -27,7 +27,8 @@ def capture_turtle():
 
     frame = cv2.resize(frame, (width, height), interpolation=cv2.INTER_AREA)
 
-    _, image = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+    _, image = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 100])
+
     if not _:
         print("Compression KO")
         return None
@@ -54,7 +55,7 @@ def main():
 
         data = { "camera_feed": image }
 
-        url = f"http://thingsboard.cloud/api/v1/{thingsboard_token}/telemetry"
+        url = f"http://thingsboard.cloud/api/v1/{thingsboard_token}/attributes"
 
         resp = requests.post(url, json=data)
         print(resp)
