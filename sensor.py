@@ -12,12 +12,12 @@ def main():
 
     while True:
         try:
-            print(sensor.temperature)
+            print(sensor.temperature, sensor.humidity)
             pass
         except Exception as e:
             print(e)
             pass
-        time.sleep(2.0)
+        time.sleep(3.0)
 
 
     return
