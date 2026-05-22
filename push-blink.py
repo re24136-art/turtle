@@ -7,7 +7,7 @@ import random
 
 def main():
 
-    with open("blynk.keys", 'r') as f:
+    with open("api.keys", 'r') as f:
         keys = json.load(f)
         print(keys)
 
@@ -30,7 +30,9 @@ def main():
 
         #curl -v -X POST http://thingsboard.cloud/api/v1/3ghpxw6ekhfqc9tsmm1e/telemetry --header Content-Type:application/json --data "{temperature:25}"
         
-        url = "http://thingsboard.cloud/api/v1/3ghpxw6ekhfqc9tsmm1e/telemetry"
+        thingsboard_token = keys.get("thingsboard_token")
+
+        url = f"http://thingsboard.cloud/api/v1/{thingsboard_token}/telemetry"
         #--header Content-Type:application/json --data "{temperature:25}"
 
 
