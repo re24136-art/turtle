@@ -2,7 +2,8 @@
 
 import requests
 import json
-
+import time
+import random
 
 def main():
 
@@ -10,6 +11,21 @@ def main():
         keys = json.load(f)
         print(keys)
 
+ 
+    url = f" https://blynk.cloud/external/api/update"
+
+    while True:
+        t_red = random.randint(80,90)
+
+        params = {
+            "token":keys.get('token'),
+            "V4": str(t_red)
+        }
+
+        resp = requests.get(url, params)
+
+        print(t_red, resp)
+        time.sleep(3)
 
     return
 
