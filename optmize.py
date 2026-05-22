@@ -4,11 +4,23 @@ import RPi.GPIO as GPIO
 import board
 import adafruit_dht
 import time
+import requests
+import json
 
 
 def change_fan_speed(fan, speed):
     fan.ChangeDutyCycle(speed)
     time.sleep(3)
+    return
+
+
+def push_data(token, data):
+
+    url = f"http://thingsboard.cloud/api/v1/{token}/telemetry"
+
+    resp = requests.post(url, json=data)
+    print(resp)
+
     return
 
 
@@ -20,6 +32,10 @@ def calculate_optimum_speed(temperature, humidity):
     m1 = (100 - 50) / (max_temp - min_temp)
     c1 = 50 - m1*min_temp
 
+    m2 = (100 - 50) / (max_humd - min_humd)
+    c2 = 50 - m2*min_humd
+
+
     if temperature < min_temp:
         tspeed = 0
     elif temperature > max_temp:
@@ -27,13 +43,23 @@ def calculate_optimum_speed(temperature, humidity):
     else:
         tspeed = int(m1*temperature + c1)
 
+    if humidity < min_humd:
+        hspeed = 0
+    elif humidity > max_humd:
+        hspeed = 100
+    else:
+        hspeed = int(m2*humidity + c2)
 
-    speed = tspeed
-    print(f"temp:{temperature} speed:{speed}")
+    speed = max([tspeed, hspeed])
+
+    print(f"temp:{temperature} humidity:{humidity} speed:{speed}")
     return speed
 
 
-
+def load_key():
+    with open("api.keys", 'r') as f:
+        keys = json.load(f)
+        return keys.get("thingsboard_token")
 
 def main():
 
@@ -53,6 +79,9 @@ def main():
     fan.start(0)
 
 
+    key = load_key()
+
+
     while True:
         try:
             temperature = sensor.temperature
@@ -61,17 +90,26 @@ def main():
             print(f"DHT-11 error: {e}")
             continue
 
-        speed = calculate_optimum_speed(temperature, humidity)
+        fan_speed = calculate_optimum_speed(temperature, humidity)
+
+        data = {
+            "temperature": temperature,
+            "humidity": humidity,
+            "fan_speed": fan_speed
+        }
+
+        push_data(key, data)
+
         #print(temperature, humidity, speed)
 
         try:
-            change_fan_speed(fan,speed)
+            change_fan_speed(fan, fan_speed)
         except KeyboardInterrupt:
             fan.stop()
             GPIO.cleanup()
             return
 
-        time.sleep(1.0)
+        time.sleep(2.0)
 
 
     return

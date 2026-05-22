@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Unit test sensor DHT-11
+
 import board
 import adafruit_dht
 import time
