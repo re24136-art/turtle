@@ -9,6 +9,7 @@ def change_speed(fan, speed):
     time.sleep(3)
     return
 
+
 def main():
 
     #GPIO.cleanup()
