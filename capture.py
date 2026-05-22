@@ -19,7 +19,7 @@ def capture_turtle():
     # Save image
     print("OK")
  
-    cropY, cropX = 150, 300
+    cropY, cropX = 150, 200
     size = 200
 
     # Crop
