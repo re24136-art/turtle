@@ -2,7 +2,7 @@
 
 # Unit test for object detection and trigger relay for LED
 
-import imageio
+import imageio.v2 as imageio
 import cv2
 import numpy as np
 import time
