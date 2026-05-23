@@ -8,8 +8,8 @@ import board
 import time
 import RPi.GPIO as GPIO
 
-SWITCH1_PIN = 23    # UVB Light
-SWITCH2_PIN = 24    # Ceramic Light
+SWITCH1_PIN = 23 # UVB Light
+SWITCH2_PIN = 24 # Ceramic Light
 
 RELAY1_PIN = 17 # UVB Light
 RELAY2_PIN = 27 # Ceramic Light
@@ -18,28 +18,20 @@ RELAY3_PIN = 22 # Stage LED
 
 def setup():
 
-
     GPIO.setmode(GPIO.BCM)
 
     GPIO.setup(SWITCH1_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(SWITCH2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     
-
     GPIO.setup(RELAY1_PIN, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setup(RELAY2_PIN, GPIO.OUT, initial=GPIO.HIGH)
-    GPIO.setup(RELAY3_PIN, GPIO.OUT, initial=GPIO.HIGH)
-
-    #GPIO.output(RELAY1_PIN, GPIO.LOW)
-    #GPIO.output(RELAY2_PIN, GPIO.LOW)
-    #GPIO.output(RELAY3_PIN, GPIO.LOW)
-
+    #GPIO.setup(RELAY3_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
     return
 
 
 
 def main():
-
 
     setup()
 
@@ -74,23 +66,13 @@ def main():
         switch2_prev = switch2_now
         
 
-        # Detect switch 2
-        #if GPIO.input(SWITCH2_PIN) == GPIO.LOW:
-        #    print("Switch 2 pressed")
-        #    GPIO.output(RELAY2_PIN, GPIO.LOW)
-        #else:
-        #    GPIO.output(RELAY2_PIN, GPIO.HIGH)
-     
-
-
         time.sleep(0.05)
-
-
 
 
     return
 
 
+# Handle program termination
 def signal_handler(sig, frame):
     print("Terminate program")
     GPIO.cleanup()
