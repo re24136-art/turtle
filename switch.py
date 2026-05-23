@@ -15,8 +15,8 @@ RELAY1_PIN = 17 # UVB Light
 RELAY2_PIN = 27 # Ceramic Light
 RELAY3_PIN = 22 # Stage LED
 
-def setup():
 
+def setup():
 
 
     GPIO.setmode(GPIO.BCM)
@@ -25,13 +25,13 @@ def setup():
     GPIO.setup(SWITCH2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     
 
-    GPIO.setup(RELAY1_PIN, GPIO.OUT)
-    GPIO.setup(RELAY2_PIN, GPIO.OUT)
-    GPIO.setup(RELAY3_PIN, GPIO.OUT)
+    GPIO.setup(RELAY1_PIN, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(RELAY2_PIN, GPIO.OUT, initial=GPIO.HIGH)
+    GPIO.setup(RELAY3_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
-    GPIO.output(RELAY1_PIN, GPIO.LOW)
-    GPIO.output(RELAY2_PIN, GPIO.LOW)
-    GPIO.output(RELAY3_PIN, GPIO.LOW)
+    #GPIO.output(RELAY1_PIN, GPIO.LOW)
+    #GPIO.output(RELAY2_PIN, GPIO.LOW)
+    #GPIO.output(RELAY3_PIN, GPIO.LOW)
 
 
     return
@@ -43,23 +43,45 @@ def main():
 
     setup()
 
+    UVB_STATE = GPIO.HIGH
+    CERAMIC_STATE = GPIO.HIGH
+
+    
+    switch1_prev = GPIO.HIGH
+    switch2_prev = GPIO.HIGH
 
     while True:
 
+        switch1_now = GPIO.input(SWITCH1_PIN)
+        switch2_now = GPIO.input(SWITCH2_PIN)
+
+
         # Detect switch 1
-        if GPIO.input(SWITCH1_PIN) == GPIO.LOW:
+        if switch1_now == GPIO.LOW and switch1_prev == GPIO.HIGH:
             print("Switch 1 pressed")
-            GPIO.output(RELAY1_PIN, GPIO.HIGH)
-        else:
-            GPIO.output(RELAY1_PIN, GPIO.LOW)
+
+            UVB_STATE = GPIO.HIGH if UVB_STATE == GPIO.LOW else GPIO.LOW
+            GPIO.output(RELAY1_PIN, UVB_STATE)
 
         # Detect switch 2
-        if GPIO.input(SWITCH2_PIN) == GPIO.LOW:
+        if switch2_now == GPIO.LOW and switch2_prev == GPIO.HIGH:
             print("Switch 2 pressed")
-            GPIO.output(RELAY2_PIN, GPIO.HIGH)
-        else:
-            GPIO.output(RELAY2_PIN, GPIO.LOW)
+
+            CERAMIC_STATE = GPIO.HIGH if CERAMIC_STATE == GPIO.LOW else GPIO.LOW
+            GPIO.output(RELAY2_PIN, CERAMIC_STATE)
+
+        switch1_prev = switch1_now
+        switch2_prev = switch2_now
         
+
+        # Detect switch 2
+        #if GPIO.input(SWITCH2_PIN) == GPIO.LOW:
+        #    print("Switch 2 pressed")
+        #    GPIO.output(RELAY2_PIN, GPIO.LOW)
+        #else:
+        #    GPIO.output(RELAY2_PIN, GPIO.HIGH)
+     
+
 
         time.sleep(0.05)
 
