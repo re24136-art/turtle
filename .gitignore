@@ -1,2 +1,4 @@
 lapse
 *.keys
+detection/*.bmp
+detection/*.png

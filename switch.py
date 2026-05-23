@@ -13,7 +13,6 @@ SWITCH2_PIN = 24 # Ceramic Light
 
 RELAY1_PIN = 17 # UVB Light
 RELAY2_PIN = 27 # Ceramic Light
-RELAY3_PIN = 22 # Stage LED
 
 
 def setup():
@@ -25,7 +24,6 @@ def setup():
     
     GPIO.setup(RELAY1_PIN, GPIO.OUT, initial=GPIO.HIGH)
     GPIO.setup(RELAY2_PIN, GPIO.OUT, initial=GPIO.HIGH)
-    #GPIO.setup(RELAY3_PIN, GPIO.OUT, initial=GPIO.HIGH)
 
     return
 

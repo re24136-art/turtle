@@ -6,4 +6,4 @@ v4l2-ctl -d /dev/video0 --set-ctrl=auto_exposure=1,exposure_time_absolute=100
 
 
 # start preview
-ffplay /dev/video0
+#ffplay /dev/video0
